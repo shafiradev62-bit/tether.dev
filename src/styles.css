@@ -1,0 +1,199 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-spice: var(--spice);
+  --color-leaf: var(--leaf);
+  --color-cream: var(--cream);
+  --font-display: "Instrument Sans", "Inter", sans-serif;
+  --font-serif: "Playfair Display", "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+:root {
+  /* Clean, light editorial palette — White + Blue Sky */
+  --background: oklch(0.99 0.005 200);      /* off-white */
+  --foreground: oklch(0.25 0.02 240);       /* deep blue-grey for text */
+  --surface: oklch(0.97 0.01 200);
+  --surface-2: oklch(0.94 0.02 200);
+  --border: oklch(0.25 0.02 240 / 0.1);
+  --muted: oklch(0.94 0.02 200);
+  --muted-foreground: oklch(0.45 0.05 240);
+  --primary: oklch(0.65 0.15 220);          /* Blue Sky */
+  --primary-foreground: oklch(0.99 0.01 220);
+  --accent: oklch(0.55 0.18 200);           /* Brighter Sky Blue */
+  --spice: oklch(0.60 0.12 210);
+  --leaf: oklch(0.65 0.10 180);
+  --cream: oklch(0.98 0.01 80);
+}
+
+/* Removed SVG filters for hand-drawn effect as requested */
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html, body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-display);
+  }
+  body {
+    /* Paper grain texture on light background */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+}
+
+@layer utilities {
+  .font-serif { font-family: var(--font-serif); }
+  .font-mono { font-family: var(--font-mono); }
+
+  /* Sky blue gradient */
+  .text-gradient {
+    background: linear-gradient(95deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Standardized buttons instead of 'drawn' effects */
+  .btn-drawn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.4rem;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    border-radius: 8px;
+    transition: transform 0.15s, background 0.15s;
+    cursor: pointer;
+  }
+  .btn-drawn:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+  }
+  .btn-drawn:active {
+    transform: translateY(0px);
+  }
+
+  /* Hand-drawn outlined button replacement */
+  .btn-drawn-outline {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.4rem;
+    background: transparent;
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    border-radius: 8px;
+    border: 1.5px solid var(--primary);
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .btn-drawn-outline:hover {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* Standardized chip */
+  .chip {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 0.76rem; letter-spacing: 0.04em;
+  }
+
+  /* Filter pill */
+  .filter-pill {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    font-size: 0.82rem;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .filter-pill:hover {
+    background: var(--surface-2);
+    border-color: var(--primary);
+  }
+  .filter-pill-active {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+  }
+
+  /* Clean recipe card */
+  .card-recipe {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px oklch(0 0 0 / 0.05);
+  }
+  .card-recipe:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px oklch(0.25 0.02 240 / 0.1);
+  }
+
+  /* Clean link underline */
+  .link-rough {
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--primary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--primary);
+    padding-bottom: 2px;
+    transition: all 0.15s;
+  }
+  .link-rough:hover { border-bottom-width: 2px; }
+
+  /* Ring glow but warmer */
+  .ring-warm {
+    box-shadow: 0 0 0 1px var(--border), 0 20px 50px -20px oklch(0.65 0.15 220 / 0.15);
+  }
+
+  /* Section number label style */
+  .label-rough {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  /* Ink smudge divider */
+  .divider-ink {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    opacity: 0.6;
+  }
+}
+
+/* The SVG filters that make borders look hand-drawn */
+body::before {
+  content: '';
+  position: fixed;
+  width: 0; height: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
