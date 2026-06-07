@@ -22,20 +22,22 @@
 }
 
 :root {
-  /* Clean, light editorial palette — White + Blue Sky */
-  --background: oklch(0.99 0.005 200);      /* off-white */
-  --foreground: oklch(0.25 0.02 240);       /* deep blue-grey for text */
-  --surface: oklch(0.97 0.01 200);
-  --surface-2: oklch(0.94 0.02 200);
-  --border: oklch(0.25 0.02 240 / 0.1);
-  --muted: oklch(0.94 0.02 200);
-  --muted-foreground: oklch(0.45 0.05 240);
-  --primary: oklch(0.65 0.15 220);          /* Blue Sky */
-  --primary-foreground: oklch(0.99 0.01 220);
-  --accent: oklch(0.55 0.18 200);           /* Brighter Sky Blue */
-  --spice: oklch(0.60 0.12 210);
-  --leaf: oklch(0.65 0.10 180);
-  --cream: oklch(0.98 0.01 80);
+  /* Warm recipe-card + ink + food zine palette. No clean AI blues. */
+  --background: #f7f2e9;     /* warm paper */
+  --foreground: #1c1814;     /* real ink */
+  --surface: #f1e9dc;        /* aged paper */
+  --surface-2: #e8dcc8;
+  --border: #3a2f26;         /* dark ink line */
+  --muted: #e6d9c7;
+  --muted-foreground: #5c5046;
+  --primary: #9f3f2a;        /* terracotta / clay stamp */
+  --primary-foreground: #f7f2e9;
+  --accent: #c97a2a;         /* saffron */
+  --spice: #9f3f2a;
+  --leaf: #4a5c3a;           /* olive */
+  --cream: #f7f2e9;
+  --usdt: #1a7a5e;           /* tether green, used sparingly */
+  --ink: #1c1814;
 }
 
 /* Removed SVG filters for hand-drawn effect as requested */
@@ -59,82 +61,98 @@
   .font-serif { font-family: var(--font-serif); }
   .font-mono { font-family: var(--font-mono); }
 
-  /* Sky blue gradient */
+  /* Warm food ink gradient */
   .text-gradient {
-    background: linear-gradient(95deg, var(--primary), var(--accent));
+    background: linear-gradient(90deg, var(--primary), var(--accent));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  /* Standardized buttons instead of 'drawn' effects */
+  /* Raw stamped / letterpress buttons — no perfect modern AI look */
   .btn-drawn {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.4rem;
+    gap: 0.4rem;
+    padding: 10px 18px;
     background: var(--primary);
     color: var(--primary-foreground);
-    font-weight: 600;
-    font-size: 0.875rem;
-    letter-spacing: 0.01em;
-    border-radius: 8px;
-    transition: transform 0.15s, background 0.15s;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 2px solid #3a2f26;
+    border-radius: 3px;
+    box-shadow: 0 2px 0 #3a2f26, inset 0 -1px 0 rgba(255,255,255,0.2);
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.1s;
     cursor: pointer;
+    user-select: none;
   }
   .btn-drawn:hover {
-    background: var(--accent);
+    background: #7d2f20;
     transform: translateY(-1px);
+    box-shadow: 0 3px 0 #3a2f26;
   }
   .btn-drawn:active {
-    transform: translateY(0px);
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 #3a2f26;
   }
 
-  /* Hand-drawn outlined button replacement */
   .btn-drawn-outline {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.4rem;
+    gap: 0.4rem;
+    padding: 9px 17px;
     background: transparent;
-    color: var(--primary);
-    font-weight: 500;
-    font-size: 0.875rem;
-    letter-spacing: 0.01em;
-    border-radius: 8px;
-    border: 1.5px solid var(--primary);
-    transition: all 0.15s;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 2.5px solid var(--ink);
+    border-radius: 2px;
+    transition: all 0.1s ease;
     cursor: pointer;
+    user-select: none;
   }
   .btn-drawn-outline:hover {
-    background: var(--primary);
-    color: var(--primary-foreground);
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .btn-drawn-outline:active {
+    transform: translateY(1px);
   }
 
-  /* Standardized chip */
+  /* Rough printed chips & pills — less rounded perfection */
   .chip {
     display: inline-flex; align-items: center; gap: 0.4rem;
-    padding: 0.35rem 0.8rem;
-    border-radius: 20px;
-    background: var(--surface); border: 1px solid var(--border);
-    font-size: 0.76rem; letter-spacing: 0.04em;
+    padding: 4px 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
   }
 
-  /* Filter pill */
   .filter-pill {
     display: inline-flex; align-items: center; gap: 0.3rem;
-    padding: 0.35rem 0.9rem;
-    border-radius: 20px;
-    border: 1.5px solid var(--border);
-    font-size: 0.82rem;
-    transition: all 0.15s;
+    padding: 5px 13px;
+    border: 2px solid var(--ink);
+    background: transparent;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: all 0.1s;
     cursor: pointer;
+    font-weight: 600;
   }
   .filter-pill:hover {
-    background: var(--surface-2);
-    border-color: var(--primary);
+    background: var(--ink);
+    color: var(--paper);
   }
   .filter-pill-active {
     background: var(--primary);
@@ -142,17 +160,27 @@
     border-color: var(--primary);
   }
 
-  /* Clean recipe card */
+  /* Printed recipe card / zine cutout feel */
   .card-recipe {
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 20px oklch(0 0 0 / 0.05);
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 4px 11px 7px 13px; /* irregular, like hand-cut */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 1px 3px 0 #3a2f26;
+    overflow: hidden;
   }
   .card-recipe:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px oklch(0.25 0.02 240 / 0.1);
+    transform: translateY(-2px) rotate(0.2deg);
+    box-shadow: 2px 5px 0 #3a2f26;
+  }
+  .card-recipe .stamp {
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    padding: 1px 7px;
+    transform: rotate(-4deg);
+    display: inline-block;
   }
 
   /* Clean link underline */
@@ -195,5 +223,110 @@ body::before {
   width: 0; height: 0;
   overflow: hidden;
   z-index: -1;
+}
+
+/* Stronger paper / old print texture */
+body {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23p)' opacity='0.065'/%3E%3C/svg%3E"),
+    linear-gradient(#f7f2e9 0%, #f1e9dc 100%);
+  background-size: 180px 180px, 100% 100%;
+}
+
+/* Raw custom modals — feel like a physical menu or ledger overlay */
+.taste-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(28, 24, 20, 0.72);
+}
+.taste-modal-inner {
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  overflow: auto;
+  box-shadow: 4px 6px 0 #1c1814;
+  position: relative;
+}
+.taste-modal-inner.wide {
+  max-width: 860px;
+}
+.taste-modal-header {
+  padding: 14px 18px;
+  border-bottom: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--background);
+}
+.taste-modal-header .title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+.taste-modal-body { padding: 18px 20px; }
+.taste-modal-footer {
+  padding: 14px 18px;
+  border-top: 2px solid var(--ink);
+  display: flex;
+  gap: 10px;
+  background: var(--background);
+}
+
+.stamp {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  padding: 1px 8px 0;
+  transform: rotate(-6deg);
+  display: inline-block;
+  pointer-events: none;
+}
+
+/* Live bid ticker */
+.bid-ticker {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: #1c1814;
+  color: #f7f2e9;
+  padding: 2px 7px;
+  letter-spacing: 1px;
+}
+
+/* Collection book page */
+.collection-page {
+  background: #f4ebdf;
+  border: 2px solid #3a2f26;
+  box-shadow: 3px 4px 0 #3a2f26;
+}
+
+/* Simple form inputs that feel typed */
+input[type="number"], input[type="text"], input[type="email"] {
+  background: var(--background);
+  border: 1.5px solid var(--ink);
+  padding: 8px 11px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(159, 63, 42, 0.1);
+}
+
+/* Rough toast overrides for sonner (less corporate) */
+[data-sonner-toaster] {
+  --normal-bg: var(--surface);
+  --normal-border: 2px solid var(--ink);
+  --normal-text: var(--ink);
 }
 

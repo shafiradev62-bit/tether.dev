@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import heroFood from "@/assets/hero-food.jpg";
+import { useTaste } from "@/lib/taste";
+import { MintModal } from "./MintModal";
 
 /* SVG filter definitions for the hand-drawn wobble effect */
 function HandDrawnFilters() {
@@ -71,6 +74,8 @@ function HandDrawnFilters() {
 export { HandDrawnFilters };
 
 export function Hero() {
+  const [showMint, setShowMint] = useState(false);
+
   return (
     <section className="relative overflow-hidden border-b border-border">
       <div className="max-w-[1280px] mx-auto px-6 pt-20 pb-28 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
@@ -103,21 +108,17 @@ export function Hero() {
             and earn a real bite at partner restaurants.
           </motion.p>
 
-          <motion.div
-            initial={false} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-8 flex flex-wrap gap-4"
-          >
+          <div className="mt-8 flex flex-wrap gap-4">
             <a href="#auctions" className="btn-drawn">
               Explore the menu
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </a>
-            <a href="#mint" className="btn-drawn-outline">
+            <button onClick={() => setShowMint(true)} className="btn-drawn-outline">
               Mint a dish
-            </a>
-          </motion.div>
+            </button>
+          </div>
 
           <div className="mt-12 flex gap-10 max-w-md">
             {[
@@ -228,6 +229,7 @@ export function Hero() {
         </div>
       </div>
       <style>{`@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }`}</style>
+      {showMint && <MintModal onClose={() => setShowMint(false)} />}
     </section>
   );
 }

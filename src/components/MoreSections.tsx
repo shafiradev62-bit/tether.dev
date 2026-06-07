@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { DISHES } from "./DishCard";
+import { useTaste } from "@/lib/taste";
+import { MintModal } from "./MintModal";
 
 const COLLECTIONS = [
   { title: "Ramen Atlas", chef: "Kenji Watanabe", items: [0, 7, 13], floor: "742", accent: "var(--primary)" },
@@ -142,6 +145,8 @@ const STEP_SHAPES = [
 ];
 
 export function HowItWorks() {
+  const [showMint, setShowMint] = useState(false);
+
   return (
     <section id="mint" className="border-b border-border">
       <div className="max-w-[1280px] mx-auto px-6 py-20">
@@ -153,37 +158,29 @@ export function HowItWorks() {
               <span className="text-gradient">provenance.</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
-              Four steps from prep to ledger. No gas tokens, no Discord ritual —
-              just your recipe, signed and settled in USDT.
+              Four steps from prep to ledger. No gas tokens, no Discord ritual — just your recipe, signed and settled in USDT.
             </p>
+            <button onClick={() => setShowMint(true)} className="btn-drawn mt-6">Start minting your dish</button>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             {STEPS.map((s, i) => (
-              <motion.div
-                key={s.n}
-                initial={false} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.07 }}
-                className="card-recipe p-5 rounded-xl border border-border hover:border-primary/30 transition-colors"
-              >
+              <div key={s.n} className="card-recipe p-5 border border-border">
                 <div className="flex items-center justify-between mb-5">
-                  <div
-                    className="w-10 h-10 grid place-items-center rounded-full"
-                    style={{
-                      background: "var(--primary)",
-                    }}
-                  >
+                  <div className="w-10 h-10 grid place-items-center rounded-full bg-primary text-primary-foreground">
                     <StepIcon name={s.icon} />
                   </div>
                   <span className="label-rough">{s.n}</span>
                 </div>
                 <h3 className="font-serif italic text-[1.15rem] mb-1.5">{s.t}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </div>
+
+      {showMint && <MintModal onClose={() => setShowMint(false)} />}
     </section>
   );
 }
@@ -240,17 +237,21 @@ export function Footer() {
             <div className="label-rough mb-4">{col.h}</div>
             {col.h === "Stay seasoned" ? (
               <form
-                className="flex border border-border p-1 rounded-lg"
+                className="flex border border-border p-1"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const form = e.currentTarget;
+                  (form.querySelector('input') as HTMLInputElement).value = '';
+                  alert("You're in. Next drop hits your inbox in the next 48h.");
+                }}
               >
                 <input
                   type="email"
                   placeholder="your@kitchen.email"
                   className="flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-muted-foreground"
+                  required
                 />
-                <button
-                  className="btn-drawn"
-                  style={{ padding: "0.4rem 0.9rem", fontSize: "0.78rem" }}
-                >
+                <button type="submit" className="btn-drawn" style={{ padding: "0.4rem 0.9rem", fontSize: "0.78rem" }}>
                   Subscribe
                 </button>
               </form>

@@ -63,116 +63,110 @@ const CARD_SHAPES = [
   "10px 6px 12px 4px / 4px 12px 6px 10px",
 ];
 
-export function DishCard({ d, index = 0 }: { d: Dish; index?: number }) {
+import { useState } from 'react';
+import { motion } from "framer-motion";
+import { useTaste, type Dish as TasteDish } from '@/lib/taste';
+import { BidModal } from './BidModal';
+import { DishModal } from './DishModal';
+
+export type Dish = {
+  id: string; name: string; origin: string; flag: string;
+  img: string; chef: string; chefImg: string; bid: string; edition: string;
+  rarity: "common" | "rare" | "epic" | "signature";
+};
+
+export function DishCard({ d, index = 0, onBid, onView }: { 
+  d: Dish; 
+  index?: number; 
+  onBid?: () => void; 
+  onView?: () => void;
+}) {
+  const { placeBid, getCurrentBid } = useTaste();
+  const [localBidOpen, setLocalBidOpen] = useState(false);
+  const [localViewOpen, setLocalViewOpen] = useState(false);
+
   const rarity = RARITY_STYLE[d.rarity];
+  const liveBid = getCurrentBid(d.id);
 
   const handlePlaceBid = () => {
-    alert(`Place bid for ${d.name} - ${d.bid} USDT`);
+    if (onBid) return onBid();
+    setLocalBidOpen(true);
   };
 
   const handleViewDish = () => {
-    alert(`Viewing ${d.name} from ${d.origin}`);
+    if (onView) return onView();
+    setLocalViewOpen(true);
+  };
+
+  // convert to the shape expected by modals
+  const dishForModal: TasteDish = {
+    ...d,
+    bid: liveBid,
   };
 
   return (
-    <motion.article
-      initial={false}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.45, delay: (index % 4) * 0.07 }}
-      className="card-recipe group relative overflow-hidden"
-    >
-      {/* Image */}
-      <div className="relative aspect-[4/5] overflow-hidden">
-        <img
-          src={d.img}
-          alt={`${d.name} from ${d.origin} — culinary NFT`}
-          loading="lazy" width={640} height={640}
-          className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+    <>
+      <motion.article
+        initial={false}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.4, delay: (index % 4) * 0.05 }}
+        className="card-recipe group relative overflow-hidden"
+      >
+        <div className="relative aspect-[4/5] overflow-hidden">
+          <img
+            src={d.img}
+            alt={`${d.name} from ${d.origin}`}
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
+
+          <div className="absolute top-3 left-3">
+            <span className="stamp text-[9px]">{rarity.label}</span>
+          </div>
+
+          <div className="absolute top-3 right-3 font-mono text-[10px] px-2 py-px bg-background/90 border border-border">
+            #{d.id}
+          </div>
+
+          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[10px]">
+            <span className="px-2 py-px bg-background/90 border border-border">{d.flag} {d.origin}</span>
+            <span className="px-2 py-px bg-background/90 border border-border font-mono">ed. {d.edition}</span>
+          </div>
+        </div>
+
+        <div className="p-4">
+          <h3 className="font-serif text-[1.05rem] italic leading-snug">{d.name}</h3>
+
+          <div className="mt-3 flex items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2 min-w-0">
+              <img src={d.chefImg} alt="" className="w-5 h-5 object-cover border border-border" style={{ borderRadius: '40% 55% 40% 55%' }} />
+              <span className="truncate text-muted-foreground">{d.chef}</span>
+            </div>
+            <div className="text-right font-mono">
+              {liveBid} <span className="text-[10px] text-muted-foreground">USDT</span>
+            </div>
+          </div>
+
+          <div className="mt-3.5 flex gap-2">
+            <button onClick={handlePlaceBid} className="btn-drawn flex-1 justify-center text-xs" style={{ padding: '7px 8px' }}>
+              Place bid
+            </button>
+            <button onClick={handleViewDish} className="btn-drawn-outline flex-1 justify-center text-xs" style={{ padding: '7px 8px' }}>
+              View dish
+            </button>
+          </div>
+        </div>
+      </motion.article>
+
+      {localBidOpen && <BidModal dish={dishForModal} onClose={() => setLocalBidOpen(false)} />}
+      {localViewOpen && (
+        <DishModal 
+          dish={dishForModal} 
+          onClose={() => setLocalViewOpen(false)} 
+          onBid={() => { setLocalViewOpen(false); setLocalBidOpen(true); }} 
         />
-
-        {/* Rarity dot + label — top left, like a hand stamp */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5">
-          <span
-            className="label-rough px-2 py-0.5"
-            style={{
-              background: "var(--background)",
-              opacity: 0.9,
-              borderRadius: "4px",
-              border: `1px solid ${rarity.dot}44`,
-              color: rarity.dot,
-            }}
-          >
-            {rarity.label}
-          </span>
-        </div>
-
-        {/* Edition — top right */}
-        <div
-          className="absolute top-3 right-3 font-mono text-[11px] px-2 py-0.5"
-          style={{
-            background: "var(--background)",
-            opacity: 0.85,
-            borderRadius: "6px 4px 8px 4px",
-          }}
-        >
-          #{d.id}
-        </div>
-
-        {/* Origin + edition — bottom overlay */}
-        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-          <span
-            className="text-[11px] px-2 py-0.5"
-            style={{ background: "var(--background)", opacity: 0.85, borderRadius: "4px 8px 4px 6px" }}
-          >
-            <span className="mr-1">{d.flag}</span>{d.origin}
-          </span>
-          <span
-            className="text-[11px] font-mono px-2 py-0.5"
-            style={{ background: "var(--background)", opacity: 0.85, borderRadius: "6px 4px 8px 4px" }}
-          >
-            ed. {d.edition}
-          </span>
-        </div>
-      </div>
-
-      {/* Card body */}
-      <div className="p-4">
-        <h3 className="font-serif text-[1.08rem] italic leading-snug">{d.name}</h3>
-
-        <div className="mt-3 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
-            <img
-              src={d.chefImg} alt={d.chef} loading="lazy" width={64} height={64}
-              className="w-6 h-6 object-cover border border-border flex-shrink-0"
-              style={{ borderRadius: "50% 40% 50% 40%" }}
-            />
-            <span className="text-xs text-muted-foreground truncate">{d.chef}</span>
-          </div>
-          <div className="text-right flex-shrink-0">
-            <div className="label-rough">top bid</div>
-            <div className="font-mono text-[0.82rem] mt-0.5">{d.bid} <span className="text-muted-foreground">USDT</span></div>
-          </div>
-        </div>
-
-        {/* Action buttons — hand-drawn style */}
-        <div className="mt-3.5 flex gap-2">
-          <button
-            className="btn-drawn flex-1 justify-center"
-            style={{ padding: "0.45rem 0.5rem", fontSize: "0.78rem" }}
-            onClick={handlePlaceBid}
-          >
-            Place bid
-          </button>
-          <button
-            className="btn-drawn-outline flex-1 justify-center"
-            style={{ padding: "0.45rem 0.5rem", fontSize: "0.78rem" }}
-            onClick={handleViewDish}
-          >
-            View dish
-          </button>
-        </div>
-      </div>
-    </motion.article>
+      )}
+    </>
   );
 }
